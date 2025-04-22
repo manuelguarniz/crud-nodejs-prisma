@@ -10,14 +10,6 @@ export const getProducts = async (req: Request, res: Response) => {
 };
 
 export const createProduct = async (req: Request, res: Response) => {
-  const parseResult = productSchema.safeParse(req.body);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      message: `Datos inválidos`,
-      details: parseResult.error.flatten(),
-    });
-  }
-
   const { name, description, price, categoryId } = req.body;
 
   try {
@@ -29,24 +21,16 @@ export const createProduct = async (req: Request, res: Response) => {
         categoryId,
       },
     });
-    return res.json(product);
+    res.json(product);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       message: `Error al crear el producto.`,
     });
   }
 };
 
 export const updateProduct = async (req: Request, res: Response) => {
-  const parseResult = productSchemaUpdate.safeParse(req.body);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      message: `Datos inválidos`,
-      details: parseResult.error.flatten(),
-    });
-  }
-
   const { id } = req.params;
 
   let product = await prisma.product.findFirst({ where: { id: Number(id) } });
@@ -64,10 +48,10 @@ export const updateProduct = async (req: Request, res: Response) => {
       },
       data,
     });
-    return res.json(product);
+    res.json(product);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       message: `Error al actualizar el producto.`,
     });
   }
@@ -82,10 +66,10 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
   try {
     await prisma.product.delete({ where: { id: Number(id) } });
-    return res.json({ message: `El producto < ${product.name} > (#${id}) ha sido eliminado!` });
+    res.json({ message: `El producto < ${product.name} > (#${id}) ha sido eliminado!` });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       message: `Error al eliminar  el producto.`,
     });
   }
