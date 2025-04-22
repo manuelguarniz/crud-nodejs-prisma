@@ -1,5 +1,8 @@
+jest.mock('../../src/services/category.service.ts');
+
 import request from 'supertest';
-import app from './../../../src/app';
+import app from '../../src/app';
+import * as categoryService from '../../src/services/category.service';
 
 describe('GET /api/category', () => {
   it('devuelve 3 categorias', async () => {
@@ -16,6 +19,8 @@ describe('GET /api/category', () => {
         name: 'comestibles',
       },
     ]);
+
+    expect(categoryService.getCategories).toHaveBeenCalled();
   });
 });
 
