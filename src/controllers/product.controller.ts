@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { productSchema, productSchemaUpdate } from '../schemas/product.schema';
 
 const prisma = new PrismaClient();
 

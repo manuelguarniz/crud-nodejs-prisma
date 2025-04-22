@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { categorySchema } from '../schemas/category.schema';
 
 const prisma = new PrismaClient();
 

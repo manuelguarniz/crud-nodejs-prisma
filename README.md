@@ -19,3 +19,11 @@ npx prisma generate
 npm install zod
 
 ```
+
+### Swagger
+
+```bash
+npm install swagger-ui-express swagger-jsdoc
+npm install -D @types/swagger-ui-express
+
+```
