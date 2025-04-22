@@ -44,3 +44,9 @@ coverage/
 
 # Output of 'npm pack'
 *.tgz
+
+# Prisma
+generated/prisma/
+
+# IntellijIDEA
+.idea/
