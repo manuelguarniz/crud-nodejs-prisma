@@ -1,7 +1,12 @@
 import { Router } from 'express';
-import { createCategory, getCategories } from '../controllers/category.controller';
-import { validateBody } from '../middleware/validate.middleware';
-import { categorySchema } from '../schemas/category.schema';
+import {
+  checkDuplicateCategory,
+  checkExistCategory,
+  createCategory,
+  getCategories,
+  getCategoryById,
+  validateCategoryData,
+} from '../controllers/category.controller';
 
 const router = Router();
 
@@ -17,6 +22,7 @@ const router = Router();
  * @param res
  */
 router.get('/', getCategories);
-router.post('/', validateBody(categorySchema), createCategory);
+router.get('/search', checkExistCategory, getCategoryById);
+router.post('/', validateCategoryData, checkDuplicateCategory, createCategory);
 
 export default router;

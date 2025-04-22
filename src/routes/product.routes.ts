@@ -1,18 +1,18 @@
 import { Router } from 'express';
 import {
+  checkExistProduct,
   createProduct,
   deleteProduct,
   getProducts,
   updateProduct,
+  validateProductData,
 } from '../controllers/product.controller';
-import { validateBody } from '../middleware/validate.middleware';
-import { productSchema, productSchemaUpdate } from '../schemas/product.schema';
 
 const router = Router();
 
 router.get('/', getProducts);
-router.post('/', validateBody(productSchema), createProduct);
-router.put('/:id', validateBody(productSchemaUpdate), updateProduct);
+router.post('/', validateProductData, createProduct);
+router.put('/:id', validateProductData, checkExistProduct, updateProduct);
 /**
  * @swagger
  * /api/product/{id}:
@@ -38,6 +38,6 @@ router.put('/:id', validateBody(productSchemaUpdate), updateProduct);
  *                   description: Mensaje de respuesta
  *                   example: El producto demo (#2) ha sido eliminado!
  */
-router.delete('/:id', deleteProduct);
+router.delete('/:id', validateProductData, checkExistProduct, deleteProduct);
 
 export default router;
