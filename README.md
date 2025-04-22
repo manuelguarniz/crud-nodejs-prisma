@@ -27,3 +27,12 @@ npm install swagger-ui-express swagger-jsdoc
 npm install -D @types/swagger-ui-express
 
 ```
+
+### Pruebas unitarias
+
+```bash
+npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
+
+npx ts-jest config:init
+
+```
