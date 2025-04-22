@@ -6,14 +6,7 @@ import {
   sendNotFoundResponse,
   sendSuccessResponse,
 } from '../utils/response-handler';
-
-const prisma = new PrismaClient();
-
-export const getCategories = async (req: Request, res: Response, next: NextFunction) => {
-  const categories = await prisma.category.findMany();
-  sendSuccessResponse(res, categories);
-  next();
-};
+import * as categoryService from '../services/category.service';
 
 export const validateCategoryData = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -24,12 +17,24 @@ export const validateCategoryData = async (req: Request, res: Response, next: Ne
   }
 };
 
+export const getCategories = async (req: Request, res: Response, next: NextFunction) => {
+  const { include, id } = req.query;
+  let categories;
+  if (include && include === 'products') {
+    categories = await categoryService.getCategoriesWithProducts();
+  } else if (id && !isNaN(Number(id))) {
+    categories = [await categoryService.findCategoryById(Number(id))];
+  } else {
+    categories = await categoryService.getCategories();
+  }
+  sendSuccessResponse(res, categories);
+  next();
+};
+
 export const checkDuplicateCategory = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
   try {
-    const existCategory = await prisma.category.findFirst({
-      where: { name: { equals: name, mode: 'insensitive' } },
-    });
+    const existCategory = await categoryService.findCategoryByName(name);
     if (existCategory) {
       sendDuplicateError(res, `La cagoria con el nombre < ${name} > ya éxiste!`);
       return;
@@ -39,12 +44,11 @@ export const checkDuplicateCategory = async (req: Request, res: Response, next: 
     next(error);
   }
 };
+
 export const checkExistCategory = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.query.id;
   try {
-    const existCategory = await prisma.category.findFirst({
-      where: { id: Number(id) },
-    });
+    const existCategory = await categoryService.findCategoryById(Number(id));
     if (!existCategory) {
       sendNotFoundResponse(res, `La categoria #${id} no éxiste!`);
       return;
@@ -55,25 +59,10 @@ export const checkExistCategory = async (req: Request, res: Response, next: Next
   }
 };
 
-export const getCategoryById = async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.query.id;
-  try {
-    const category = await prisma.category.findFirst({ where: { id: Number(id) } });
-    sendSuccessResponse(res, category);
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
   try {
-    const category = await prisma.category.create({
-      data: {
-        name,
-      },
-    });
+    const category = await categoryService.createCategory(name);
     sendSuccessResponse(res, category);
     next();
   } catch (error) {

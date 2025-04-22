@@ -1,10 +1,8 @@
 import { Router } from 'express';
 import {
   checkDuplicateCategory,
-  checkExistCategory,
   createCategory,
   getCategories,
-  getCategoryById,
   validateCategoryData,
 } from '../controllers/category.controller';
 
@@ -22,7 +20,6 @@ const router = Router();
  * @param res
  */
 router.get('/', getCategories);
-router.get('/search', checkExistCategory, getCategoryById);
 router.post('/', validateCategoryData, checkDuplicateCategory, createCategory);
 
 export default router;
