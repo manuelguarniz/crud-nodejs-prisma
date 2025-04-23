@@ -5,7 +5,6 @@ jest.mock('../../src/services/category.service', () => ({
 import request from 'supertest';
 import app from '../../src/app';
 import * as categoryService from '../../src/services/category.service';
-import { sendSuccessResponse } from '../../src/utils/response-handler';
 
 describe('GET /api/category', () => {
   it('devuelve 3 categorias', async () => {
