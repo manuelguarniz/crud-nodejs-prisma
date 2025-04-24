@@ -36,3 +36,10 @@ npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
 npx ts-jest config:init
 
 ```
+
+### Loggin
+
+```bash
+npm install pino pino-pretty pino-http
+
+```
